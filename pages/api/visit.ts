@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
-  try {
+   try {
       const page = await browser.newPage();
       await page.goto(String(url));
 
@@ -20,11 +20,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const buffer = await page.screenshot({ path: imageName });
       const image64 = buffer.toString("base64");
       
-      res.status(200).json({ data: image64 });
       await browser.close(); 
+      return res.status(200).json({ data: image64 });
   } catch (err) {
       console.log(err);
       await browser.close(); 
-      res.status(500).json({ data: "", message: err });
+      return res.status(500).json({ data: "", message: err });
   }
 }
